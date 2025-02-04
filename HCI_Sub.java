@@ -39,7 +39,7 @@ public class Subscriber implements MqttCallback {
 
         // String Array List is limited to 20 words for convenience. Arraylist is cleared when it reaches 21 words
 
-        if (req.size()<=20) {
+        if (req.size()<=1000) {
             req.add(message.toString());
         }
         else{
