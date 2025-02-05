@@ -15,6 +15,9 @@ public class Window extends JFrame {
     String fileAbsolutePath;
     private Publisher publisher;
     private StatusPanel statusPanel;
+    private String url = "tcp://test.mosquitto.org:1883";
+    private String topic = "Spotify";
+
     public Window() {
         super("CSC486 HCISE Publisher");
         setSize(800, 600);
@@ -31,6 +34,7 @@ public class Window extends JFrame {
         JMenu fileMenu = new JMenu("File");
         JMenu serverMenu = new JMenu("Server");
         JMenu helpMenu = new JMenu("Help");
+        JMenu settingsMenu = new JMenu("Settings");
 
 
 
@@ -38,6 +42,8 @@ public class Window extends JFrame {
         JMenuItem startServer = new JMenuItem("Start");
         JMenuItem stopServer = new JMenuItem("Stop");
         JMenuItem about = new JMenuItem("About");
+        JMenuItem changeURL = new JMenuItem("Change URL");
+        JMenuItem changeTopic = new JMenuItem("Change Topic");
 
 
 
@@ -48,7 +54,7 @@ public class Window extends JFrame {
                 if (action.equals("Load")) {
                     System.out.println("Loading file...");
                     try {
-                        publisher = new Publisher(statusPanel);
+                        publisher = new Publisher(statusPanel, url, topic);
 
                         JFileChooser fileChooser = new JFileChooser();
                         fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
@@ -120,6 +126,26 @@ public class Window extends JFrame {
 
 
                 }
+                if (action.equals("Change URL")){
+                    String message = String.format("Current URL: %s", url);
+                    String input = JOptionPane.showInputDialog(message + "\nPlease input a valid URL value.");
+                    if (input == null){
+                        JOptionPane.showMessageDialog(Window.this, "Invalid URL value.");
+                    }
+                    else{
+                        url = input;
+                    }
+                }
+                if (action.equals("Change Topic")){
+                    String message = String.format("Current Topic: %s", topic);
+                    String input = JOptionPane.showInputDialog(message + "\nPlease input a topic name.");
+                    if (input == null){
+                        JOptionPane.showMessageDialog(Window.this, "Invalid topic value.");
+                    }
+                    else{
+                        topic = input;
+                    }
+                }
 
             }
         };
@@ -128,10 +154,13 @@ public class Window extends JFrame {
         startServer.addActionListener(menuListener);
         stopServer.addActionListener(menuListener);
         about.addActionListener(menuListener);
+        changeURL.addActionListener(menuListener);
+        changeTopic.addActionListener(menuListener);
 
         menuBar.add(fileMenu);
         menuBar.add(serverMenu);
         menuBar.add(helpMenu);
+        menuBar.add(settingsMenu);
 
         fileMenu.add(loadFile);
 
@@ -139,6 +168,9 @@ public class Window extends JFrame {
         serverMenu.add(stopServer);
 
         helpMenu.add(about);
+
+        settingsMenu.add(changeURL);
+        settingsMenu.add(changeTopic);
 
         add(menuBar, BorderLayout.NORTH);
 

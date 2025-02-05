@@ -93,11 +93,10 @@ public class Publisher {
         });
         timer.start();
     }
-    public Publisher(StatusPanel statusPanel) throws InterruptedException {
-         this.statusPanel = statusPanel;
-
-
-
+    public Publisher(StatusPanel statusPanel, String newBroker, String newTopic) throws InterruptedException {
+        this.statusPanel = statusPanel;
+        broker = newBroker;
+        topic = newTopic;
     }
 
     public void connectToBroker() throws MqttException {
