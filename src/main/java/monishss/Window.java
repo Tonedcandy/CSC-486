@@ -13,32 +13,30 @@ import java.io.IOException;
 
 public class Window extends JFrame {
     String fileAbsolutePath;
-    private Publisher publisher;
     private StatusPanel statusPanel;
     private String url = "tcp://test.mosquitto.org:1883";
     private String topic = "Spotify";
+    Subscriber subscriber;
 
     public Window() {
-        super("CSC486 HCISE Publisher");
+        super("CSC486 HCISE Subscriber");
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setBackground(new Color(0,0,0));
 
         statusPanel = new StatusPanel();
-
+        Subscriber subscriber = new Subscriber(statusPanel);
 
 
         JMenuBar menuBar = new JMenuBar();
 
-        JMenu fileMenu = new JMenu("File");
         JMenu serverMenu = new JMenu("Server");
         JMenu helpMenu = new JMenu("Help");
         JMenu settingsMenu = new JMenu("Settings");
 
 
 
-        JMenuItem loadFile = new JMenuItem("Load");
         JMenuItem startServer = new JMenuItem("Start");
         JMenuItem stopServer = new JMenuItem("Stop");
         JMenuItem about = new JMenuItem("About");
@@ -51,50 +49,19 @@ public class Window extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String action = e.getActionCommand();
-                if (action.equals("Load")) {
-                    System.out.println("Loading file...");
-                    try {
-                        publisher = new Publisher(statusPanel, url, topic);
-
-                        JFileChooser fileChooser = new JFileChooser();
-                        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
-                        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-                        int result = fileChooser.showOpenDialog(Window.this);
-                        if (result == JFileChooser.APPROVE_OPTION) {
-                            File selectedFile = fileChooser.getSelectedFile();
-                             fileAbsolutePath= selectedFile.getAbsolutePath();
-                             publisher.readFromFile(fileAbsolutePath);
-
-                        }
-
-
-                    }
-                    catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-
-                    statusPanel.setFileStatus("File Loaded Successfully");
-                }
 
                 if (action.equals("Start")){
                     System.out.println("Starting server...");
-                    try {
-                        publisher.connectToBroker();
-                    } catch (MqttException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    publisher.processCSV();
+                    subscriber.connectToBroker();
+                    //subscriber.processCSV();
                     statusPanel.setConnectionStatus("Connected to MQTT Broker");
                 }
 
                 if (action.equals("Stop")){
                     System.out.println("Stopping server...");
                     try {
-                        publisher.disconnectFromBroker();
+                        subscriber.disconnectFromBroker();
                         statusPanel.setConnectionStatus("Disconnected from MQTT Broker");
-                    } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
                     } catch (MqttException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -150,19 +117,16 @@ public class Window extends JFrame {
             }
         };
 
-        loadFile.addActionListener(menuListener);
         startServer.addActionListener(menuListener);
         stopServer.addActionListener(menuListener);
         about.addActionListener(menuListener);
         changeURL.addActionListener(menuListener);
         changeTopic.addActionListener(menuListener);
 
-        menuBar.add(fileMenu);
         menuBar.add(serverMenu);
         menuBar.add(helpMenu);
         menuBar.add(settingsMenu);
 
-        fileMenu.add(loadFile);
 
         serverMenu.add(startServer);
         serverMenu.add(stopServer);

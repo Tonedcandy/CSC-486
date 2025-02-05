@@ -1,72 +1,38 @@
-// Monish S. S., Megan W., Andrea Ng
 package monishss;
 
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
 
+/**
+ * Taken from https://github.com/javiergs/NielsenSkeleton
+ *
+ * Blackboard class is a Singleton that contains a list of samples.
+ * It extends PropertyChangeSupport to notify the observers when a new sample is added.
+ *
+ * @author javiergs
+ * @version 1.0
+ */
 public class Blackboard extends PropertyChangeSupport {
-    private static Blackboard blackboard;
 
-    private String pad;
+    private static Blackboard instance;
+    //private LinkedList<String> samples;
+    String combo;
 
     private Blackboard() {
         super(new Object());
-
     }
 
     public static Blackboard getInstance() {
-        if (blackboard == null) {
-            blackboard = new Blackboard();
+        if (instance == null) {
+            instance = new Blackboard();
         }
-        return blackboard;
+        return instance;
     }
 
-    public void writeToBlackboard(String pad) throws InterruptedException {
-        String oldPad = "";
-        this.pad = pad;
-
-        System.out.println("WTB: "+pad);
-        // Fire the event: property name, old value, and new value
-        switch (pad){
-            case "+++":
-                firePropertyChange("+++", oldPad, pad);
-                break;
-            case "++-":
-                firePropertyChange("++-", oldPad, pad);
-                break;
-            case "+-+":
-                firePropertyChange("+-+", oldPad, pad);
-                break;
-            case "+--":
-                firePropertyChange("+--", oldPad, pad);
-                break;
-            case "-++":
-                firePropertyChange("-++", oldPad, pad);
-                break;
-            case "-+-":
-                firePropertyChange("-+-", oldPad, pad);
-                break;
-            case "--+":
-                firePropertyChange("--+", oldPad, pad);
-                break;
-            case "---":
-                firePropertyChange("---", oldPad, pad);
-                break;
-            default:
-                break;
-
-        }
-
-
-
+    public void addValue(String combo) {
+        String oldCombo = "";
+        this.combo= combo;
+        firePropertyChange(combo, oldCombo, this.combo);
+        System.out.println("WTB: "+ this.combo);
     }
-
-    public void displayPADValues(){
-        System.out.println("Pleasure: " + pad+" Arousal: " + pad+" Dominance: " + pad);
-        System.out.println();
-    }
-
-
-
 
 }

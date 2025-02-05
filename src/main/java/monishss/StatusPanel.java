@@ -19,17 +19,14 @@ public class StatusPanel extends JPanel {
 
         // Create labels with default text and white color.
         connectionStatusLabel = createStatusLabel("Connection: Unknown");
-        fileStatusLabel = createStatusLabel("File: Not loaded");
         commandStatusLabel = createStatusLabel("Commands: None");
 
         // Add some padding by wrapping labels in a panel or using borders.
         connectionStatusLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        fileStatusLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         commandStatusLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         // Add labels to the StatusPanel.
         add(connectionStatusLabel);
-        add(fileStatusLabel);
         add(commandStatusLabel);
     }
 
@@ -46,9 +43,6 @@ public class StatusPanel extends JPanel {
         connectionStatusLabel.setText("Connection: " + status);
     }
 
-    public void setFileStatus(String status) {
-        fileStatusLabel.setText("File: " + status);
-    }
 
     public void setCommandStatus(String status) {
         commandStatusLabel.setText("Commands: " + status);
