@@ -30,20 +30,24 @@ public class Subscriber implements MqttCallback {
     }
     @Override
     public void connectionLost(Throwable throwable) {
-
+        System.out.println("Connection lost: " + throwable.getMessage());
     }
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        System.out.println("Inside Subscriber: "+message.toString());
+        System.out.println("Inside Subscriber: " + message.toString());
 
 
         if (req.size()<=1000) {
             req.add(message.toString());
+
+            Blackboard.getInstance().addValue("mqttMessage", message.toString());
         }
         else{
             System.out.println("Data Structure is Full, clearing it");
             req.clear();
+
+            Blackboard.getInstance().addValue("status", "Cleared data after 1000 messages");
         }
     }
 
