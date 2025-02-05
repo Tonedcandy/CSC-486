@@ -12,8 +12,6 @@ public class Subscriber implements MqttCallback {
     String topic="Spotify";
     String clientID = "CalPoly-ProjectNameSub";
 
-    ArrayList<String> req = new ArrayList<String>();
-
     public Subscriber() {
         try {
             MqttClient mqttClient = new MqttClient(broker, clientID);
@@ -35,20 +33,9 @@ public class Subscriber implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        System.out.println("Inside Subscriber: " + message.toString());
 
+        Blackboard.getInstance().addValue("mqttMessage: ", message.toString());
 
-        if (req.size()<=1000) {
-            req.add(message.toString());
-
-            Blackboard.getInstance().addValue("mqttMessage", message.toString());
-        }
-        else{
-            System.out.println("Data Structure is Full, clearing it");
-            req.clear();
-
-            Blackboard.getInstance().addValue("status", "Cleared data after 1000 messages");
-        }
     }
 
 
