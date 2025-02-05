@@ -26,7 +26,7 @@ public class Window extends JFrame {
         setBackground(new Color(0,0,0));
 
         statusPanel = new StatusPanel();
-        Subscriber subscriber = new Subscriber(statusPanel);
+        subscriber = new Subscriber(statusPanel, url, topic);
 
 
         JMenuBar menuBar = new JMenuBar();
@@ -51,6 +51,7 @@ public class Window extends JFrame {
                 String action = e.getActionCommand();
 
                 if (action.equals("Start")){
+                    subscriber = new Subscriber(statusPanel, url, topic);
                     System.out.println("Starting server...");
                     subscriber.connectToBroker();
                     //subscriber.processCSV();

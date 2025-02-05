@@ -13,8 +13,10 @@ public class Subscriber implements MqttCallback {
     String clientID = "CalPoly-ProjectNameSub";
     private MqttClient mqttClient;
     private StatusPanel statusPanel;
-    public Subscriber(StatusPanel statusPanel) {
+    public Subscriber(StatusPanel statusPanel, String broker, String topic) {
     this.statusPanel = statusPanel;
+    this.broker = broker;
+    this.topic = topic;
 
     }
     @Override
