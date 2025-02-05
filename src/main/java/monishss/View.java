@@ -11,7 +11,6 @@ import java.beans.PropertyChangeListener;
 public class View extends JPanel implements PropertyChangeListener {
     private Blackboard blackboard;
     JPanel padPanel1, padPanel2, padPanel3, padPanel4, padPanel5, padPanel6, padPanel7, padPanel8;
-
     public View() {
         blackboard = Blackboard.getInstance();
         blackboard.addPropertyChangeListener(this);
@@ -28,6 +27,10 @@ public class View extends JPanel implements PropertyChangeListener {
         padPanel7 = new JPanel();
         padPanel8 = new JPanel();
 
+
+
+
+
         padPanel1.setBackground(new Color(64, 64, 64));
         padPanel2.setBackground(new Color(64, 64, 64));
         padPanel3.setBackground(new Color(64, 64, 64));
@@ -36,6 +39,15 @@ public class View extends JPanel implements PropertyChangeListener {
         padPanel6.setBackground(new Color(64, 64, 64));
         padPanel7.setBackground(new Color(64, 64, 64));
         padPanel8.setBackground(new Color(64, 64, 64));
+
+        padPanel1.add(new JLabel("+++"));
+        padPanel2.add(new JLabel("++-"));
+        padPanel3.add(new JLabel("+-+"));
+        padPanel4.add(new JLabel("+--"));
+        padPanel5.add(new JLabel("-++"));
+        padPanel6.add(new JLabel("-+-"));
+        padPanel7.add(new JLabel("--+"));
+        padPanel8.add(new JLabel("---"));
 
 
         add(padPanel1);
@@ -46,6 +58,8 @@ public class View extends JPanel implements PropertyChangeListener {
         add(padPanel6);
         add(padPanel7);
         add(padPanel8);
+
+
 
 
 

@@ -23,6 +23,7 @@ public class Publisher {
     private MqttClient client;
     private String combo;
     private List<String> combos;
+    private StatusPanel statusPanel;
 
     public void readFromFile(String filePath){
         String line;
@@ -82,6 +83,8 @@ public class Publisher {
                 }
                 try {
                     publishMessage(combo);
+                    statusPanel.setCommandStatus(combo);
+                    statusPanel.repaint();
                 } catch (InterruptedException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -90,7 +93,14 @@ public class Publisher {
         });
         timer.start();
     }
-    public Publisher() throws InterruptedException {
+    public Publisher(StatusPanel statusPanel) throws InterruptedException {
+         this.statusPanel = statusPanel;
+
+
+
+    }
+
+    public void connectToBroker() throws MqttException {
         try {
             client = new MqttClient(broker, clientID);
             client.connect();
@@ -100,8 +110,6 @@ public class Publisher {
         catch (MqttException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public void publishMessage(String messageText) throws  InterruptedException {
@@ -119,7 +127,7 @@ public class Publisher {
 
     }
 
-    public void stopPublisher() throws InterruptedException, MqttException {
+    public void disconnectFromBroker() throws InterruptedException, MqttException {
         if (client != null && client.isConnected()) {
             client.disconnect();
         }
