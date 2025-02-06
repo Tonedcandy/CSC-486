@@ -30,6 +30,39 @@ public class Subscriber implements MqttCallback {
         statusPanel.repaint();
         Blackboard.getInstance().addValue(message.toString());
 
+
+        String data = message.toString();  // convert  incoming message to a string
+
+        JSONObject jsonData = new JSONObject(data);
+
+        // extract values from JSON data
+        double leftX = jsonData.getJSONObject("left_eye").getDouble("x");
+        double leftY = jsonData.getJSONObject("left_eye").getDouble("y");
+        double leftPupil = jsonData.getJSONObject("left_eye").getDouble("pupil");
+
+        double rightX = jsonData.getJSONObject("right_eye").getDouble("x");
+        double rightY = jsonData.getJSONObject("right_eye").getDouble("y");
+        double rightPupil = jsonData.getJSONObject("right_eye").getDouble("pupil");
+
+        // create JSON object
+        JSONObject gazeData = new JSONObject();
+        gazeData.put("left_eye_x", leftX);
+        gazeData.put("left_eye_y", leftY);
+        gazeData.put("left_eye_pupil", leftPupil);
+        gazeData.put("right_eye_x", rightX);
+        gazeData.put("right_eye_y", rightY);
+        gazeData.put("right_eye_pupil", rightPupil);
+
+        // save data to a file (gaze_data.json)
+        try (FileWriter file = new FileWriter("gaze_data.json", true)) {
+            file.write(gazeData.toString() + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Store the gaze data in the Blackboard???
+        Blackboard.getInstance().addValue(gazeData);
+        Blackboard.getInstance().addValue("mqttMessage", gazeData.toString());
     }
 
 
