@@ -15,7 +15,7 @@ public class Window extends JFrame {
     String fileAbsolutePath;
     private StatusPanel statusPanel;
     private String url = "tcp://test.mosquitto.org:1883";
-    private String topic = "Spotify";
+    private String topic = "javiergs/tobii/gazedata";
     Subscriber subscriber;
 
     public Window() {
