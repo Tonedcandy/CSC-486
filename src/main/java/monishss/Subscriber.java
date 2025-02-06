@@ -60,8 +60,7 @@ public class Subscriber implements MqttCallback {
             e.printStackTrace();
         }
 
-        // Store the gaze data in the Blackboard???
-        Blackboard.getInstance().addValue(gazeData);
+        // send  gaze data to the Blackboard???
         Blackboard.getInstance().addValue("mqttMessage", gazeData.toString());
     }
 
