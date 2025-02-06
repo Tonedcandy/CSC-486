@@ -41,18 +41,18 @@ public class Subscriber implements MqttCallback {
         double rightY = jsonData.getJSONObject("right_eye").getDouble("y");
         double rightPupil = jsonData.getJSONObject("right_eye").getDouble("pupil");
 
-        // Create string to represent  data
+        // Create string to represent data
         String gazeData = "Left Eye - X: " + leftX + ", Y: " + leftY + ", Pupil: " + leftPupil +
                           " | Right Eye - X: " + rightX + ", Y: " + rightY + ", Pupil: " + rightPupil;
 
-        // Save data to a text file (gaze_data.txt)
+        // save data to a text file (gaze_data.txt)
         try (FileWriter file = new FileWriter("gaze_data.txt", true)) {
             file.write(gazeData + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // send  gaze data to the Blackboard???
+        // send gaze data to the Blackboard???
         Blackboard.getInstance().addValue("mqttMessage", gazeData.toString());
     }
 
