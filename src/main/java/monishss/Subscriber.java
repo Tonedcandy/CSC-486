@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Subscriber implements MqttCallback {
 
     String broker="tcp://test.mosquitto.org:1883";
-    String topic="Spotify";
+    String topic="javiergs/tobii/gazedata";
     String clientID = "CalPoly-ProjectNameSub";
     private MqttClient mqttClient;
     private StatusPanel statusPanel;
