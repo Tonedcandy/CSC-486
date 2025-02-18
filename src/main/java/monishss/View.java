@@ -173,7 +173,7 @@ public class View extends JPanel implements ActionListener {
                 if (Objects.equals(test, "numberSpan")){
                     SubmitButton.setEnabled(false);
                     StringBuilder correct = new StringBuilder();
-                    String answer = Input.getText();
+                    String answer = Input.getText().replaceAll("\\s+", "");
                     blackboard.setPlayerInput(answer);
                     Input.setText("");
                     Input.setEnabled(false);
@@ -230,7 +230,7 @@ public class View extends JPanel implements ActionListener {
                 else{
                     SubmitButton.setEnabled(false);
                     StringBuilder correct = new StringBuilder();
-                    String answer = Input.getText().toUpperCase();
+                    String answer = Input.getText().toUpperCase().replaceAll("\\s+", "");;
                     blackboard.setPlayerInput(answer);
                     Input.setText("");
                     Input.setEnabled(false);
