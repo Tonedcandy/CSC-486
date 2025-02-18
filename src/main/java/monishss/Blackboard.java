@@ -17,10 +17,14 @@ public class Blackboard extends PropertyChangeSupport {
     private static Blackboard instance;
     private LinkedList<String> samples;
     String combo;
+    Integer score;
+    String display;
+    String playerInput;
 
     private Blackboard() {
         super(new Object());
         samples = new LinkedList<>();
+        score = 0;
     }
 
     public static Blackboard getInstance() {
@@ -42,4 +46,19 @@ public class Blackboard extends PropertyChangeSupport {
         }
     }
 
+    public void setDisplay(String display) {
+        this.display = display;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public void setPlayerInput(String playerInput) {
+        this.playerInput = playerInput;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
 }

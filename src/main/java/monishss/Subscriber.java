@@ -1,7 +1,10 @@
 // Monish S. S., Megan W., Andrea Ng
 package monishss;
 import org.eclipse.paho.client.mqttv3.*;
+import org.json.JSONObject;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 
@@ -31,7 +34,7 @@ public class Subscriber implements MqttCallback {
         Blackboard.getInstance().addValue(message.toString());
 
         // parse  JSON data
-        JSONObject jsonData = new JSONObject(data);
+        JSONObject jsonData = new JSONObject();
 
         double leftX = jsonData.getJSONObject("left_eye").getDouble("x");
         double leftY = jsonData.getJSONObject("left_eye").getDouble("y");
@@ -53,7 +56,7 @@ public class Subscriber implements MqttCallback {
         }
 
         // send gaze data to the Blackboard???
-        Blackboard.getInstance().addValue("mqttMessage", gazeData.toString());
+        Blackboard.getInstance().addValue(gazeData);
     }
 
 
