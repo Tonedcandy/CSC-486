@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLOutput;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 
@@ -48,8 +50,14 @@ public class Subscriber implements MqttCallback {
         String gazeData = "Left Eye - X: " + leftX + ", Y: " + leftY + ", Pupil: " + leftPupil +
                           " | Right Eye - X: " + rightX + ", Y: " + rightY + ", Pupil: " + rightPupil;
 
-        // save data to a text file (gaze_data.txt)
-        try (FileWriter file = new FileWriter("gaze_data.txt", true)) {
+        // Get current timestamp
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
+        String timestamp = now.format(formatter);
+
+        // save data to a text file (cognitive_factor_data_[timestamp].txt)
+        try (
+                FileWriter file = new FileWriter("cognitive_factor_data_" + timestamp + ".txt", true)) {
             file.write(gazeData + "\n");
         } catch (IOException e) {
             e.printStackTrace();
