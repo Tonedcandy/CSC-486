@@ -2,6 +2,8 @@
 package monishss;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.event.KeyEvent;
 import java.util.*;
 import java.awt.*;
@@ -22,6 +24,7 @@ public class View extends JPanel implements ActionListener {
     private JLabel Displayed;
     private JTextField Input;
     private JButton SubmitButton;
+    private DocumentListener InputListener;
     private String test;
     private String mode;
     private Integer strike;
@@ -63,6 +66,25 @@ public class View extends JPanel implements ActionListener {
                 Input.getBorder(),
                 BorderFactory.createEmptyBorder(50, 50, 50, 50)));
 
+        // UPDATE INPUT IN BLACKBOARD WHENEVER CHANGED
+        InputListener = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                blackboard.setPlayerInput(Input.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                blackboard.setPlayerInput(Input.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                blackboard.setPlayerInput(Input.getText());
+            }
+        };
+        Input.getDocument().addDocumentListener(InputListener);
+
         SubmitButton = new JButton("Start");
         SubmitButton.setActionCommand("Submit");
         SubmitButton.addActionListener(this);
@@ -84,6 +106,7 @@ public class View extends JPanel implements ActionListener {
     // ADMINISTER NUMBER SPAN TEST
     public void ShowNumbers(){
         Input.setText("");
+        blackboard.setPlayerInput("");
         if (NumList != null){
             NumList.clear();}
         Input.setEnabled(false);
@@ -106,6 +129,7 @@ public class View extends JPanel implements ActionListener {
                     timer.cancel();
                     SubmitButton.setEnabled(true);
                     Input.setEnabled(true);
+                    Input.requestFocusInWindow();
                     return;
                 }
                 Integer temp = randomNum;
@@ -123,6 +147,7 @@ public class View extends JPanel implements ActionListener {
 
     // ADMINISTER LETTER NUMBER SEQUENCING TEST
     public void ShowStrings(){
+        blackboard.setPlayerInput("");
         mode = "letter";
         if (StrList != null){
             StrList.clear();}
@@ -140,6 +165,7 @@ public class View extends JPanel implements ActionListener {
                     timer.cancel();
                     SubmitButton.setEnabled(true);
                     Input.setEnabled(true);
+                    Input.requestFocusInWindow();
                     return;
                 }
                 Integer temp = randomNum;
