@@ -71,16 +71,17 @@ public class View extends JPanel implements ActionListener {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 blackboard.setPlayerInput(Input.getText());
+                blackboard.updateLog();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 blackboard.setPlayerInput(Input.getText());
+                blackboard.updateLog();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                blackboard.setPlayerInput(Input.getText());
             }
         };
         Input.getDocument().addDocumentListener(InputListener);
@@ -101,6 +102,8 @@ public class View extends JPanel implements ActionListener {
         setBorder(BorderFactory.createCompoundBorder(
                 this.getBorder(),
                 BorderFactory.createEmptyBorder(20, 20, 20, 20)));
+
+        blackboard.updateLog();
     }
 
     // ADMINISTER NUMBER SPAN TEST
@@ -130,6 +133,7 @@ public class View extends JPanel implements ActionListener {
                     SubmitButton.setEnabled(true);
                     Input.setEnabled(true);
                     Input.requestFocusInWindow();
+                    blackboard.updateLog();
                     return;
                 }
                 Integer temp = randomNum;
@@ -140,6 +144,8 @@ public class View extends JPanel implements ActionListener {
                 System.out.println(randomNum);
                 Displayed.setText(randomNum.toString());
                 blackboard.setDisplay(randomNum.toString());
+                blackboard.setPlayerInput("");
+                blackboard.updateLog();
             };
         };
         timer.schedule(task, 1000, 1000);
@@ -166,6 +172,7 @@ public class View extends JPanel implements ActionListener {
                     SubmitButton.setEnabled(true);
                     Input.setEnabled(true);
                     Input.requestFocusInWindow();
+                    blackboard.updateLog();
                     return;
                 }
                 Integer temp = randomNum;
@@ -186,6 +193,8 @@ public class View extends JPanel implements ActionListener {
                 System.out.println(result);
                 Displayed.setText(result);
                 blackboard.setDisplay(result);
+                blackboard.setPlayerInput("");
+                blackboard.updateLog();
             };
         };
         timer.schedule(task, 1000, 1000);
@@ -195,12 +204,12 @@ public class View extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if ("Submit".equals(e.getActionCommand())) {
+            String buttonAction = SubmitButton.getText();
             if ((Objects.equals(SubmitButton.getText(), "Submit"))){
                 if (Objects.equals(test, "numberSpan")){
                     SubmitButton.setEnabled(false);
                     StringBuilder correct = new StringBuilder();
                     String answer = Input.getText().replaceAll("\\s+", "");
-                    blackboard.setPlayerInput(answer);
                     Input.setText("");
                     Input.setEnabled(false);
                     for (int i = 0; i < NumList.size(); i++) {
@@ -257,7 +266,6 @@ public class View extends JPanel implements ActionListener {
                     SubmitButton.setEnabled(false);
                     StringBuilder correct = new StringBuilder();
                     String answer = Input.getText().toUpperCase().replaceAll("\\s+", "");;
-                    blackboard.setPlayerInput(answer);
                     Input.setText("");
                     Input.setEnabled(false);
                     Collections.sort(StrList);
@@ -287,12 +295,17 @@ public class View extends JPanel implements ActionListener {
                         }
                         else{
                             Displayed.setText("The test has concluded.");
+                            blackboard.setDisplay("The test has concluded.");
                             SubmitButton.setEnabled(false);
+                            blackboard.setPlayerInput(String.format("[%s]", buttonAction.toUpperCase()));
+                            blackboard.updateLog();
                             return;
                         }
                     }
                     SubmitButton.setEnabled(true);
                 }
+                blackboard.setPlayerInput(String.format("[%s]", buttonAction.toUpperCase()));
+                blackboard.updateLog();
             }
             else {
                 SubmitButton.setText("Submit");
@@ -309,6 +322,8 @@ public class View extends JPanel implements ActionListener {
                 else if (Objects.equals(test, "orderSequence")) {
                     ShowStrings();
                 }
+                blackboard.setPlayerInput(String.format("[%s]", buttonAction.toUpperCase()));
+                blackboard.updateLog();
             }
         } else {
             System.out.println("hi");

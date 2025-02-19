@@ -52,7 +52,7 @@ public class Subscriber implements MqttCallback {
 
         // Get current timestamp
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
         String timestamp = now.format(formatter);
 
         // save data to a text file (cognitive_factor_data_[timestamp].txt)
