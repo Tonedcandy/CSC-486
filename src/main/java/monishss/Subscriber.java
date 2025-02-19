@@ -1,11 +1,13 @@
 // Monish S. S., Megan W., Andrea Ng
 package monishss;
 import org.eclipse.paho.client.mqttv3.*;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLOutput;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -14,8 +16,10 @@ import java.util.ArrayList;
 public class Subscriber implements MqttCallback {
 
     String broker="tcp://test.mosquitto.org:1883";
-    String topic="javiergs/tobii/gazedata";
+
+    String topic="monishss";
     String clientID = "CalPoly-ProjectNameSub";
+    JSONObject jsonObject;
     private MqttClient mqttClient;
     private StatusPanel statusPanel;
     public Subscriber(StatusPanel statusPanel, String broker, String topic) {
@@ -36,36 +40,49 @@ public class Subscriber implements MqttCallback {
         Blackboard.getInstance().addValue(message.toString());
 
         // parse  JSON data
-        JSONObject jsonData = new JSONObject();
+        try {
+            jsonObject = new JSONObject(message.toString());
+        }catch (JSONException err){
+            System.err.println("Error"+ err.toString());
+        }
 
-        double leftX = jsonData.getJSONObject("left_eye").getDouble("x");
-        double leftY = jsonData.getJSONObject("left_eye").getDouble("y");
-        double leftPupil = jsonData.getJSONObject("left_eye").getDouble("pupil");
+        Double affectUnixTimestamp = jsonObject.getJSONObject("insight").getDouble("affectUnixTimestamp");
+        String affectConvertedTimestamp = jsonObject.getJSONObject("insight").getString("affectConvertedTimestamp");
 
-        double rightX = jsonData.getJSONObject("right_eye").getDouble("x");
-        double rightY = jsonData.getJSONObject("right_eye").getDouble("y");
-        double rightPupil = jsonData.getJSONObject("right_eye").getDouble("pupil");
+        Boolean affectBoolean1 = jsonObject.getJSONObject("insight").getBoolean("affectBoolean1");
+        Boolean affectBoolean2 = jsonObject.getJSONObject("insight").getBoolean("affectBoolean2");
+        Boolean affectBoolean3  = jsonObject.getJSONObject("insight").getBoolean("affectBoolean3");
+        Boolean affectBoolean4 = jsonObject.getJSONObject("insight").getBoolean("affectBoolean4");
+        Boolean affectBoolean5 = jsonObject.getJSONObject("insight").getBoolean("affectBoolean5");
+        Boolean affectBoolean6 = jsonObject.getJSONObject("insight").getBoolean("affectBoolean6");
 
-        // Create string to represent data
-        String gazeData = "Left Eye - X: " + leftX + ", Y: " + leftY + ", Pupil: " + leftPupil +
-                          " | Right Eye - X: " + rightX + ", Y: " + rightY + ", Pupil: " + rightPupil;
+        Double affectDouble1 = jsonObject.getJSONObject("insight").getDouble("affectDouble1");
+        Double affectDouble2 = jsonObject.getJSONObject("insight").getDouble("affectDouble2");
+        Double affectDouble3 = jsonObject.getJSONObject("insight").getDouble("affectDouble3");
+        Double affectDouble4 = jsonObject.getJSONObject("insight").getDouble("affectDouble4");
+        Double affectDouble5 = jsonObject.getJSONObject("insight").getDouble("affectDouble5");
+        Double affectDouble6 = jsonObject.getJSONObject("insight").getDouble("affectDouble6");
 
+        String deviceData = String.format("%f,\"%s\",\"%s\",%f,\"%s\",%f,\"%s\",%f,\"%s\",%f,\"%s\",%f,\"%s\",%f,", affectUnixTimestamp,
+                affectConvertedTimestamp, affectBoolean1, affectDouble1, affectBoolean2,affectDouble2,affectBoolean3,affectDouble3,affectBoolean4,affectDouble4,affectBoolean5,affectDouble5,affectBoolean6,affectDouble6);
+
+        Blackboard blackboard = Blackboard.getInstance();
         // Get current timestamp
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String timestamp = now.format(formatter);
 
         // save data to a text file (cognitive_factor_data_[timestamp].txt)
         try (
-                FileWriter file = new FileWriter("cognitive_factor_data_" + timestamp + ".txt", true)) {
+                FileWriter file = new FileWriter("cognitive_test_data_" + timestamp + ".csv", true)) {
             // APPEND TEST DATA USING blackboard.generateAppend()
-            file.write(gazeData + "\n");
+            file.write(deviceData + blackboard.generateAppend() +"\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // send gaze data to the Blackboard???
-        Blackboard.getInstance().addValue(gazeData);
+        Blackboard.getInstance().addValue(deviceData);
     }
 
 

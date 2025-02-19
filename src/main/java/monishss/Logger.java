@@ -9,7 +9,7 @@ public class Logger {
     private String fileName;
     public Logger(){
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String timestamp = now.format(formatter);
         fileName = "cognitive_test_data_" + timestamp + ".csv";
     }

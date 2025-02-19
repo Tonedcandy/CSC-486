@@ -23,6 +23,8 @@ public class Blackboard extends PropertyChangeSupport {
     Integer score;
     String display;
     String playerInput;
+    Long unixTimestamp;
+    String timestamp;
 
     private Blackboard() {
         super(new Object());
@@ -31,7 +33,7 @@ public class Blackboard extends PropertyChangeSupport {
         score = 0;
         display = "";
         playerInput = "";
-        logger.logData("\"UnixTimestamp\",\"Timestamp\",\"Display\",\"Input\",\"Score\"");
+        logger.logData("\"AffectUnixTimestamp\",\"AffectTimestamp\",\"AffectBoolean1\",\"AffectDouble1\",\"AffectBoolean2\",\"AffectDouble2\",\"AffectBoolean3\",\"AffectDouble3\",\"AffectBoolean4\",\"AffectDouble4\",\"AffectBoolean5\",\"AffectDouble5\",\"AffectBoolean6\",\"AffectDouble6\",\"UnixTimestamp\",\"Timestamp\",\"Display\",\"Input\",\"Score\"");
     }
 
     public static Blackboard getInstance() {
@@ -72,9 +74,9 @@ public class Blackboard extends PropertyChangeSupport {
     public void updateLog(){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-        String timestamp = now.format(formatter);
-        Long unixTimestamp = System.currentTimeMillis();
-        String data = String.format("%d,\"%s\", \"%s\", \"%s\", %d", unixTimestamp,
+        timestamp = now.format(formatter);
+        unixTimestamp = System.currentTimeMillis();
+        String data = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,\"%s\", \"%s\", \"%s\", %d","","","","","","","","","","","","","","", unixTimestamp,
                 timestamp, display, playerInput, score);
         logger.logData(data);
     }
@@ -84,6 +86,6 @@ public class Blackboard extends PropertyChangeSupport {
     }
 
     public String generateAppend(){
-        return String.format(",\"%s\",\"%s\",%d", display, playerInput, score);
+        return String.format("%d,\"%s\", \"%s\", \"%s\", %d", unixTimestamp,timestamp, display, playerInput, score);
     }
 }
