@@ -58,6 +58,7 @@ public class Subscriber implements MqttCallback {
         // save data to a text file (cognitive_factor_data_[timestamp].txt)
         try (
                 FileWriter file = new FileWriter("cognitive_factor_data_" + timestamp + ".txt", true)) {
+            // APPEND TEST DATA USING blackboard.generateAppend()
             file.write(gazeData + "\n");
         } catch (IOException e) {
             e.printStackTrace();
