@@ -1,0 +1,2 @@
+Regex to find column shift (^,{14}1.*$)
+Regex to fix column shift ,$1
