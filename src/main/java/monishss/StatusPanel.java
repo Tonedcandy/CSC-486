@@ -8,11 +8,13 @@ public class StatusPanel extends JPanel {
     private JLabel connectionStatusLabel;
     private JLabel fileStatusLabel;
     private JLabel commandStatusLabel;
+    private Color circleColor = Color.BLUE; //what should the starting/default color of the circle be??
 
     public StatusPanel() {
         // Set background to black and use white text.
         setBackground(Color.BLACK);
         setForeground(Color.WHITE);
+        
 
         // Use a BoxLayout for vertical stacking.
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -46,5 +48,10 @@ public class StatusPanel extends JPanel {
 
     public void setCommandStatus(String status) {
         commandStatusLabel.setText("Commands: " + status);
+    }
+
+    public void setCircleColor(Color color) { //for changing circle color during hand raise
+        this.circleColor = color;
+        repaint();
     }
 }
