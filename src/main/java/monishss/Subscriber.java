@@ -9,6 +9,8 @@ import java.sql.SQLOutput;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Subscriber implements MqttCallback {
@@ -33,39 +35,77 @@ public class Subscriber implements MqttCallback {
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         statusPanel.setCommandStatus(message.toString());
         statusPanel.repaint();
-        Blackboard.getInstance().addValue(message.toString());
 
         // parse  JSON data
         JSONObject jsonData = new JSONObject();
 
-        double leftX = jsonData.getJSONObject("left_eye").getDouble("x");
-        double leftY = jsonData.getJSONObject("left_eye").getDouble("y");
-        double leftPupil = jsonData.getJSONObject("left_eye").getDouble("pupil");
+        double leftEyeGazeX = jsonData.getJSONObject("leftEyeGaze").getDouble("x");
+        double leftEyeGazeY = jsonData.getJSONObject("leftEyeGaze").getDouble("y");
+        double leftEyeGazeZ = jsonData.getJSONObject("leftEyeGaze").getDouble("z");
 
-        double rightX = jsonData.getJSONObject("right_eye").getDouble("x");
-        double rightY = jsonData.getJSONObject("right_eye").getDouble("y");
-        double rightPupil = jsonData.getJSONObject("right_eye").getDouble("pupil");
+        double rightEyeGazeX = jsonData.getJSONObject("rightEyeGaze").getDouble("x");
+        double rightEyeGazeY = jsonData.getJSONObject("rightEyeGaze").getDouble("y");
+        double rightEyeGazeZ = jsonData.getJSONObject("rightEyeGaze").getDouble("z");
 
-        // Create string to represent data
-        String gazeData = "Left Eye - X: " + leftX + ", Y: " + leftY + ", Pupil: " + leftPupil +
-                          " | Right Eye - X: " + rightX + ", Y: " + rightY + ", Pupil: " + rightPupil;
+        double eyeFixationPointX = jsonData.getJSONObject("eyeFixationPoint").getDouble("x");
+        double eyeFixationPointY = jsonData.getJSONObject("eyeFixationPoint").getDouble("y");
+        double eyeFixationPointZ = jsonData.getJSONObject("eyeFixationPoint").getDouble("z");
 
-        // Get current timestamp
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
-        String timestamp = now.format(formatter);
+        double headX = jsonData.getJSONObject("head").getDouble("x");
+        double headY = jsonData.getJSONObject("head").getDouble("y");
+        double headZ = jsonData.getJSONObject("head").getDouble("z");
 
-        // save data to a text file (cognitive_factor_data_[timestamp].txt)
-        try (
-                FileWriter file = new FileWriter("cognitive_factor_data_" + timestamp + ".txt", true)) {
-            // APPEND TEST DATA USING blackboard.generateAppend()
-            file.write(gazeData + "\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        double leftArmUpX = jsonData.getJSONObject("leftArmUp").getDouble("x");
+        double leftArmUpY = jsonData.getJSONObject("leftArmUp").getDouble("y");
+        double leftArmUpZ = jsonData.getJSONObject("leftArmUp").getDouble("z");
 
-        // send gaze data to the Blackboard???
-        Blackboard.getInstance().addValue(gazeData);
+        double leftArmLowX = jsonData.getJSONObject("lefArmLow").getDouble("x");
+        double leftArmLowY = jsonData.getJSONObject("lefArmLow").getDouble("y");
+        double leftArmLowZ = jsonData.getJSONObject("lefArmLow").getDouble("z");
+
+        double rightArmUpX = jsonData.getJSONObject("rightArmUp").getDouble("x");
+        double rightArmUpY = jsonData.getJSONObject("rightArmUp").getDouble("y");
+        double rightArmUpZ = jsonData.getJSONObject("rightArmUp").getDouble("z");
+
+        double rightArmLowX = jsonData.getJSONObject("rightArmLow").getDouble("x");
+        double rightArmLowY = jsonData.getJSONObject("rightArmLow").getDouble("y");
+        double rightArmLowZ = jsonData.getJSONObject("rightArmLow").getDouble("z");
+
+        Map<String, Double> map = new HashMap<String, Double>();
+        map.put("leftEyeGazeX", leftEyeGazeX);
+        map.put("leftEyeGazeY", leftEyeGazeY);
+        map.put("leftEyeGazeZ", leftEyeGazeZ);
+
+        map.put("rightEyeGazeX", rightEyeGazeX);
+        map.put("rightEyeGazeY", rightEyeGazeY);
+        map.put("rightEyeGazeZ", rightEyeGazeZ);
+
+        map.put("eyeFixationPointX", eyeFixationPointX);
+        map.put("eyeFixationPointY", eyeFixationPointY);
+        map.put("eyeFixationPointZ", eyeFixationPointZ);
+
+        map.put("headX", headX);
+        map.put("headY", headY);
+        map.put("headZ", headZ);
+
+        map.put("leftArmUpX", leftArmUpX);
+        map.put("leftArmUpY", leftArmUpY);
+        map.put("leftArmUpZ", leftArmUpZ);
+
+        map.put("leftArmLowX", leftArmLowX);
+        map.put("leftArmLowY", leftArmLowY);
+        map.put("leftArmLowZ", leftArmLowZ);
+
+        map.put("rightArmUpX", rightArmUpX);
+        map.put("rightArmUpY", rightArmUpY);
+        map.put("rightArmUpZ", rightArmUpZ);
+
+        map.put("rightArmLowX", rightArmLowX);
+        map.put("rightArmLowY", rightArmLowY);
+        map.put("rightArmLowZ", rightArmLowZ);
+
+        // send gaze data to the Blackboard
+        Blackboard.getInstance().addValue(map);
     }
 
 
