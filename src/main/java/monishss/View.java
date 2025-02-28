@@ -12,7 +12,7 @@ public class View extends JPanel implements PropertyChangeListener {
     double yOffset = 0;
     double radius = 100;
     Color circleColor = Color.BLUE;
-    
+
     public View() {
         blackboard = Blackboard.getInstance();
         blackboard.addPropertyChangeListener(this);
@@ -29,10 +29,12 @@ public class View extends JPanel implements PropertyChangeListener {
         // and rightArmUp/RightArmLow
         // to determine whether your right or
         // left arm are up
+        leftArmY = (values.get("leftArmUpY"))
+        rightArmY = (values.get("rightArmUpY"))
 
-        if (leftArmUpY > 0.5) {
+        if (leftArmY > 0.5) {
             circleColor = Color.RED; 
-        } else if (rightArmUpY > 0.5) {
+        } else if (rightArmY > 0.5) {
             circleColor = Color.BLUE; 
         } else {
             circleColor = Color.GREEN;  // Default color when neither hand raised? Do we want this?
