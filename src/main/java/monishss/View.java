@@ -12,6 +12,10 @@ public class View extends JPanel implements PropertyChangeListener {
     double yOffset = 0;
     double radius = 100;
     Color circleColor = Color.BLACK;
+    double rightWristY;
+    double leftWristY;
+
+    double rightArmY;
 
     public View() {
         blackboard = Blackboard.getInstance();
@@ -29,21 +33,23 @@ public class View extends JPanel implements PropertyChangeListener {
         // and rightArmUp/RightArmLow
         // to determine whether your right or
         // left arm are up
-        leftArmY = (values.get("leftArmUpY"));
-        rightArmY = (values.get("rightArmUpY"));
+        leftWristY = (values.get("leftWristY"));
+        rightWristY = (values.get("rightWristY"));
 
-        if (leftArmY > 0.5 && rightArmY > 0.5) {
+
+
+        if (leftWristY > 1 && rightWristY > 1) {
             circleColor = Color.GREEN; 
-        } else if (rightArmY > 0.5) {
+        } else if (rightWristY > 1) {
             circleColor = Color.BLUE; 
-        } else if (leftArmX > 0.5){
+        } else if (leftWristY > 1){
             circleColor = Color.RED;
         } else {
             circleColor = Color.BLACK;  // Default color when neither hand raised? Do we want this?
         }
 
         // get size
-        radius = (values.get("headZ") * 50) + 50;
+        radius = ((values.get("headZ")*-1) * 50) + 50;
 
         // redraw circle
         repaint();

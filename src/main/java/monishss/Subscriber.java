@@ -37,7 +37,7 @@ public class Subscriber implements MqttCallback {
         statusPanel.repaint();
 
         // parse  JSON data
-        JSONObject jsonData = new JSONObject();
+        JSONObject jsonData = new JSONObject(message.toString());
 
         double leftEyeGazeX = jsonData.getJSONObject("leftEyeGaze").getDouble("x");
         double leftEyeGazeY = jsonData.getJSONObject("leftEyeGaze").getDouble("y");
@@ -55,13 +55,17 @@ public class Subscriber implements MqttCallback {
         double headY = jsonData.getJSONObject("head").getDouble("y");
         double headZ = jsonData.getJSONObject("head").getDouble("z");
 
+        double leftWristY = jsonData.getJSONObject("leftWrist").getDouble("y");
+        double rightWristY = jsonData.getJSONObject("rightWrist").getDouble("y");
+
+
         double leftArmUpX = jsonData.getJSONObject("leftArmUp").getDouble("x");
         double leftArmUpY = jsonData.getJSONObject("leftArmUp").getDouble("y");
         double leftArmUpZ = jsonData.getJSONObject("leftArmUp").getDouble("z");
 
-        double leftArmLowX = jsonData.getJSONObject("lefArmLow").getDouble("x");
-        double leftArmLowY = jsonData.getJSONObject("lefArmLow").getDouble("y");
-        double leftArmLowZ = jsonData.getJSONObject("lefArmLow").getDouble("z");
+        double leftArmLowX = jsonData.getJSONObject("leftArmLow").getDouble("x");
+        double leftArmLowY = jsonData.getJSONObject("leftArmLow").getDouble("y");
+        double leftArmLowZ = jsonData.getJSONObject("leftArmLow").getDouble("z");
 
         double rightArmUpX = jsonData.getJSONObject("rightArmUp").getDouble("x");
         double rightArmUpY = jsonData.getJSONObject("rightArmUp").getDouble("y");
@@ -91,6 +95,10 @@ public class Subscriber implements MqttCallback {
         map.put("leftArmUpX", leftArmUpX);
         map.put("leftArmUpY", leftArmUpY);
         map.put("leftArmUpZ", leftArmUpZ);
+
+        map.put("leftWristY", leftWristY);
+        map.put("rightWristY", rightWristY);
+
 
         map.put("leftArmLowX", leftArmLowX);
         map.put("leftArmLowY", leftArmLowY);
